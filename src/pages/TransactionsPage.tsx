@@ -183,36 +183,60 @@ export default function TransactionsPage() {
             {!loading && !error && transactions.length === 0 && <p className="mt-4 text-slate-300">No transactions found for this user yet.</p>}
 
             {!loading && !error && transactions.length > 0 && (
-              <div className="mt-4 overflow-x-auto rounded-2xl border border-slate-800">
-                <table className="min-w-[640px] divide-y divide-slate-800 text-left text-sm">
-                  <thead>
-                    <tr className="text-slate-400">
-                      <th className="px-4 py-3">Date</th>
-                      <th className="px-4 py-3">Amount</th>
-                      <th className="px-4 py-3">Category</th>
-                      <th className="px-4 py-3">Note</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-800">
-                    {sortedTransactions.map((transaction) => (
-                      <tr key={transaction.id} className="hover:bg-slate-800/60">
-                        <td className="px-4 py-3 text-slate-200">{new Date(transaction.created_at).toLocaleString()}</td>
-                        <td className={`px-4 py-3 font-semibold ${((transaction.categories?.type ?? 'expense') === 'income') ? 'text-emerald-300' : 'text-rose-300'}`}>
-                          {Number(transaction.amount).toFixed(2)}
-                        </td>
-                        <td className="px-4 py-3 text-slate-200">{(transaction as TransactionRecord & { categories?: { name?: string | null } }).categories?.name ?? 'Uncategorized'}</td>
-                        <td className="px-4 py-3 text-slate-300">{transaction.note ?? '—'}</td>
-                        <td className="px-4 py-3">
-                          <div className="flex flex-wrap gap-2">
-                            <button type="button" onClick={() => startEdit(transaction)} className="rounded-full border border-slate-700 px-3 py-1 text-xs font-semibold text-slate-100">Edit</button>
-                            <button type="button" onClick={() => void handleDeleteTransaction(transaction.id)} className="rounded-full border border-rose-700/70 px-3 py-1 text-xs font-semibold text-rose-200">Delete</button>
-                          </div>
-                        </td>
+              <>
+                <div className="mt-4 hidden overflow-x-auto rounded-2xl border border-slate-800 lg:block">
+                  <table className="min-w-[640px] divide-y divide-slate-800 text-left text-sm">
+                    <thead>
+                      <tr className="text-slate-400">
+                        <th className="px-4 py-3">Date</th>
+                        <th className="px-4 py-3">Amount</th>
+                        <th className="px-4 py-3">Category</th>
+                        <th className="px-4 py-3">Note</th>
+                        <th className="px-4 py-3">Actions</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody className="divide-y divide-slate-800">
+                      {sortedTransactions.map((transaction) => (
+                        <tr key={transaction.id} className="hover:bg-slate-800/60">
+                          <td className="px-4 py-3 text-slate-200">{new Date(transaction.created_at).toLocaleString()}</td>
+                          <td className={`px-4 py-3 font-semibold ${((transaction.categories?.type ?? 'expense') === 'income') ? 'text-emerald-300' : 'text-rose-300'}`}>
+                            {Number(transaction.amount).toFixed(2)}
+                          </td>
+                          <td className="px-4 py-3 text-slate-200">{(transaction as TransactionRecord & { categories?: { name?: string | null } }).categories?.name ?? 'Uncategorized'}</td>
+                          <td className="px-4 py-3 text-slate-300">{transaction.note ?? '—'}</td>
+                          <td className="px-4 py-3">
+                            <div className="flex flex-wrap gap-2">
+                              <button type="button" onClick={() => startEdit(transaction)} className="rounded-full border border-slate-700 px-3 py-1 text-xs font-semibold text-slate-100">Edit</button>
+                              <button type="button" onClick={() => void handleDeleteTransaction(transaction.id)} className="rounded-full border border-rose-700/70 px-3 py-1 text-xs font-semibold text-rose-200">Delete</button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="mt-4 space-y-3 lg:hidden">
+                  {sortedTransactions.map((transaction) => (
+                    <article key={transaction.id} className="rounded-2xl border border-slate-800 bg-slate-950/80 p-4 shadow-lg shadow-black/20">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-sm text-slate-400">{new Date(transaction.created_at).toLocaleString()}</p>
+                          <p className="mt-1 text-base font-semibold text-white">{transaction.note ?? 'Transaction'}</p>
+                          <p className="mt-1 text-sm text-slate-300">{(transaction as TransactionRecord & { categories?: { name?: string | null } }).categories?.name ?? 'Uncategorized'}</p>
+                        </div>
+                        <p className={`text-base font-semibold ${((transaction.categories?.type ?? 'expense') === 'income') ? 'text-emerald-300' : 'text-rose-300'}`}>
+                          {Number(transaction.amount).toFixed(2)}
+                        </p>
+                      </div>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        <button type="button" onClick={() => startEdit(transaction)} className="rounded-full border border-slate-700 px-3 py-1.5 text-xs font-semibold text-slate-100">Edit</button>
+                        <button type="button" onClick={() => void handleDeleteTransaction(transaction.id)} className="rounded-full border border-rose-700/70 px-3 py-1.5 text-xs font-semibold text-rose-200">Delete</button>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </>
             )}
           </article>
         </section>
