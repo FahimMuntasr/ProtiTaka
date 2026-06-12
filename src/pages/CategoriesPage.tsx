@@ -77,7 +77,7 @@ export default function CategoriesPage() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-950 p-8 text-slate-100 md:p-10">
+    <main className="min-h-screen bg-slate-950 p-4 text-slate-100 sm:p-6 md:p-10">
       <AppNavigation />
       <div className="mx-auto flex max-w-6xl flex-col gap-8 px-2 md:px-0">
         <header className="flex flex-wrap items-center justify-between gap-4 pt-2">
@@ -88,7 +88,7 @@ export default function CategoriesPage() {
           </div>
         </header>
 
-        <section className="grid gap-6 rounded-3xl border border-slate-800 bg-slate-900/80 p-6 shadow-2xl shadow-black/30 lg:grid-cols-[1fr_1.1fr]">
+        <section className="grid gap-6 rounded-3xl border border-slate-800 bg-slate-900/80 p-4 shadow-2xl shadow-black/30 sm:p-6 lg:grid-cols-[1fr_1.1fr]">
           <article className="rounded-3xl border border-slate-800 bg-slate-950/80 p-5">
             <h2 className="text-xl font-semibold text-white">Create category</h2>
             <p className="mt-2 text-sm text-slate-300">Add names you want to reuse when logging expenses.</p>
@@ -134,12 +134,12 @@ export default function CategoriesPage() {
                   .sort((a, b) => (a.type ?? '').localeCompare(b.type ?? '') || (a.name ?? '').localeCompare(b.name ?? ''))
                   .map((category) => (
                     <li key={category.id} className="rounded-2xl border border-slate-800 bg-slate-900/80 p-4 text-slate-100">
-                      <div className="flex items-start justify-between gap-4">
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                         <div>
                           <p className="font-semibold">{category.name}</p>
                           <p className="text-sm text-slate-400">Type: {category.type}</p>
                         </div>
-                        <div className="flex gap-2">
+                        <div className="flex flex-wrap gap-2">
                           <button type="button" onClick={() => startEdit(category)} className="rounded-full border border-slate-700 px-3 py-1 text-xs font-semibold text-slate-100">Edit</button>
                           <button type="button" onClick={() => void handleDeleteCategory(category.id)} className="rounded-full border border-rose-700/70 px-3 py-1 text-xs font-semibold text-rose-200">Delete</button>
                         </div>

@@ -132,7 +132,7 @@ export default function TransactionsPage() {
   }, [sortBy, transactions])
 
   return (
-    <main className="min-h-screen bg-slate-950 p-8 text-slate-100 md:p-10">
+    <main className="min-h-screen bg-slate-950 p-4 text-slate-100 sm:p-6 md:p-10">
       <AppNavigation />
       <div className="mx-auto flex max-w-6xl flex-col gap-8 px-2 md:px-0">
         <header className="flex flex-wrap items-center justify-between gap-4 pt-2">
@@ -142,7 +142,7 @@ export default function TransactionsPage() {
           </div>
         </header>
 
-        <section className="grid gap-6 rounded-3xl border border-slate-800 bg-slate-900/80 p-6 shadow-2xl shadow-black/30 lg:grid-cols-[1fr_1.2fr]">
+        <section className="grid gap-6 rounded-3xl border border-slate-800 bg-slate-900/80 p-4 shadow-2xl shadow-black/30 sm:p-6 lg:grid-cols-[1fr_1.2fr]">
           <article className="rounded-3xl border border-slate-800 bg-slate-950/80 p-5">
             <h2 className="text-xl font-semibold text-white">{editingId ? 'Edit expense' : 'Add expense'}</h2>
             <p className="mt-2 text-sm text-slate-300">Create or update a transaction for the signed-in user only.</p>
@@ -157,9 +157,9 @@ export default function TransactionsPage() {
                 ))}
               </select>
               <input type="date" value={form.createdAt} onChange={(event) => setForm((current) => ({ ...current, createdAt: event.target.value }))} className="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none focus:border-emerald-400" />
-              <div className="flex gap-3">
-                <button type="submit" disabled={submitting} className="flex-1 rounded-full bg-emerald-400 px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-emerald-300 disabled:opacity-70">{submitting ? 'Saving...' : editingId ? 'Update expense' : 'Save expense'}</button>
-                {editingId ? <button type="button" onClick={resetForm} className="rounded-full border border-slate-700 px-5 py-3 text-sm font-semibold text-slate-100">Cancel</button> : null}
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <button type="submit" disabled={submitting} className="w-full rounded-full bg-emerald-400 px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-emerald-300 disabled:opacity-70 sm:flex-1">{submitting ? 'Saving...' : editingId ? 'Update expense' : 'Save expense'}</button>
+                {editingId ? <button type="button" onClick={resetForm} className="w-full rounded-full border border-slate-700 px-5 py-3 text-sm font-semibold text-slate-100 sm:w-auto">Cancel</button> : null}
               </div>
             </form>
 
@@ -167,12 +167,12 @@ export default function TransactionsPage() {
           </article>
 
           <article className="rounded-3xl border border-slate-800 bg-slate-950/80 p-5">
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h2 className="text-xl font-semibold text-white">Recent expenses</h2>
                 <p className="mt-2 text-sm text-slate-300">Only transactions for the current authenticated user are shown.</p>
               </div>
-              <select value={sortBy} onChange={(event) => setSortBy(event.target.value as 'newest' | 'highest')} className="rounded-full border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 outline-none focus:border-emerald-400">
+              <select value={sortBy} onChange={(event) => setSortBy(event.target.value as 'newest' | 'highest')} className="w-full rounded-full border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 outline-none focus:border-emerald-400 sm:w-auto">
                 <option value="newest">Newest first</option>
                 <option value="highest">Highest amount</option>
               </select>
@@ -183,8 +183,8 @@ export default function TransactionsPage() {
             {!loading && !error && transactions.length === 0 && <p className="mt-4 text-slate-300">No transactions found for this user yet.</p>}
 
             {!loading && !error && transactions.length > 0 && (
-              <div className="mt-4 overflow-x-auto">
-                <table className="min-w-full divide-y divide-slate-800 text-left text-sm">
+              <div className="mt-4 overflow-x-auto rounded-2xl border border-slate-800">
+                <table className="min-w-[640px] divide-y divide-slate-800 text-left text-sm">
                   <thead>
                     <tr className="text-slate-400">
                       <th className="px-4 py-3">Date</th>
@@ -203,7 +203,7 @@ export default function TransactionsPage() {
                         <td className="px-4 py-3 text-slate-200">{(transaction as TransactionRecord & { categories?: { name?: string | null } }).categories?.name ?? 'Uncategorized'}</td>
                         <td className="px-4 py-3 text-slate-300">{transaction.note ?? '—'}</td>
                         <td className="px-4 py-3">
-                          <div className="flex gap-2">
+                          <div className="flex flex-wrap gap-2">
                             <button type="button" onClick={() => startEdit(transaction)} className="rounded-full border border-slate-700 px-3 py-1 text-xs font-semibold text-slate-100">Edit</button>
                             <button type="button" onClick={() => void handleDeleteTransaction(transaction.id)} className="rounded-full border border-rose-700/70 px-3 py-1 text-xs font-semibold text-rose-200">Delete</button>
                           </div>
