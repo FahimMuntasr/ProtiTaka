@@ -20,7 +20,7 @@ export default function AppNavigation({ variant = 'app' }: { variant?: 'app' | '
   return (
     <nav className="sticky top-0 z-20 border-b border-slate-800/90 bg-slate-950/95 backdrop-blur">
       <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6 py-4 md:px-8">
-        <NavLink to={variant === 'public' ? '/' : '/dashboard'} className="text-lg font-semibold tracking-[0.2em] text-emerald-300 uppercase">
+        <NavLink to={variant === 'public' ? '/' : '/dashboard'} className="text-lg font-semibold tracking-[0.2em] text-emerald-300">
           ProtiTaka
         </NavLink>
 
