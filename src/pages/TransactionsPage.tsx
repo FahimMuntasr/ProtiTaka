@@ -78,13 +78,13 @@ export default function TransactionsPage() {
           note: form.note.trim(),
           amount: Math.abs(amount),
           category_id: form.categoryId || null,
-          created_at: new Date(`${form.createdAt}T12:00:00`).toISOString(),
+          created_at: form.createdAt,
         })
       : await addTransaction({
           note: form.note.trim(),
           amount: Math.abs(amount),
           category_id: form.categoryId || null,
-          created_at: new Date(`${form.createdAt}T12:00:00`).toISOString(),
+          created_at: form.createdAt,
         })
 
     if (result.error) {
@@ -198,7 +198,7 @@ export default function TransactionsPage() {
                     <tbody className="divide-y divide-slate-800">
                       {sortedTransactions.map((transaction) => (
                         <tr key={transaction.id} className="hover:bg-slate-800/60">
-                          <td className="px-4 py-3 text-slate-200">{new Date(transaction.created_at).toLocaleString()}</td>
+                          <td className="px-4 py-3 text-slate-200">{new Date(transaction.created_at).toLocaleDateString()}</td>
                           <td className={`px-4 py-3 font-semibold ${((transaction.categories?.type ?? 'expense') === 'income') ? 'text-emerald-300' : 'text-rose-300'}`}>
                             {Number(transaction.amount).toFixed(2)}
                           </td>
@@ -221,7 +221,7 @@ export default function TransactionsPage() {
                     <article key={transaction.id} className="rounded-2xl border border-slate-800 bg-slate-950/80 p-4 shadow-lg shadow-black/20">
                       <div className="flex items-start justify-between gap-3">
                         <div>
-                          <p className="text-sm text-slate-400">{new Date(transaction.created_at).toLocaleString()}</p>
+                          <p className="text-sm text-slate-400">{new Date(transaction.created_at).toLocaleDateString()}</p>
                           <p className="mt-1 text-base font-semibold text-white">{transaction.note ?? 'Transaction'}</p>
                           <p className="mt-1 text-sm text-slate-300">{(transaction as TransactionRecord & { categories?: { name?: string | null } }).categories?.name ?? 'Uncategorized'}</p>
                         </div>

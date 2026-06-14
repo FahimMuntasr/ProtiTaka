@@ -158,7 +158,7 @@ export async function addTransaction(input: {
     amount: Math.abs(input.amount),
     note: input.note,
     category_id: input.category_id ?? null,
-    created_at: input.created_at ?? new Date().toISOString(),
+    created_at: input.created_at ?? new Date().toISOString().slice(0, 10),
   })
 
   return { error }
@@ -182,7 +182,7 @@ export async function updateTransaction(id: string, input: {
       amount: Math.abs(input.amount),
       note: input.note,
       category_id: input.category_id ?? null,
-      created_at: input.created_at ?? new Date().toISOString(),
+      created_at: input.created_at ?? new Date().toISOString().slice(0, 10),
     })
     .eq('id', id)
     .eq('user_id', userId)

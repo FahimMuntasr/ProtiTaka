@@ -66,23 +66,6 @@ Use this when you are ready to deploy:
 npm run build
 ```
 
-## Deployment
-
-This app is designed to be deployed on Vercel.
-
-For mobile-friendly production use, make sure the deployed version is tested on a real phone viewport as well as desktop.
-
-Recommended deployment steps:
-
-1. Push the repository to GitHub
-2. Import the project in Vercel
-3. Set the same environment variables used in `.env.local`
-4. Use the build command:
-
-```bash
-npm run build
-```
-
 5. Set the output directory to `dist`
 
 ## Notes
