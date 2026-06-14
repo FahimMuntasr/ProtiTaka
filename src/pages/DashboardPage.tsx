@@ -75,6 +75,24 @@ export default function DashboardPage() {
     [filteredTransactions],
   )
 
+  const filteredIncomeTransactions = useMemo(() => {
+    return transactions.filter((row) => {
+      const isIncome = (row.categories?.type ?? 'expense') === 'income'
+      if (!isIncome) return false
+
+      const monthKey = formatMonthKey(row.created_at)
+      const monthMatch = selectedMonth === 'all' || monthKey === selectedMonth
+      const categoryMatch = selectedCategory === 'all' || row.category_id === selectedCategory
+
+      return monthMatch && categoryMatch
+    })
+  }, [selectedCategory, selectedMonth, transactions])
+
+  const monthlyIncome = useMemo(
+    () => filteredIncomeTransactions.reduce((sum, row) => sum + Number(row.amount), 0),
+    [filteredIncomeTransactions],
+  )
+
   const categoryBreakdown = useMemo(() => {
     const totals = new Map<string, number>()
 
@@ -127,11 +145,16 @@ export default function DashboardPage() {
           </div>
         </header>
 
-        <section className="grid gap-4 rounded-3xl border border-slate-800 bg-slate-900/80 p-6 shadow-2xl shadow-black/30 md:grid-cols-3">
+        <section className="grid gap-4 rounded-3xl border border-slate-800 bg-slate-900/80 p-6 shadow-2xl shadow-black/30 md:grid-cols-4">
           <article className="rounded-2xl border border-slate-800 bg-slate-950/80 p-4">
             <p className="text-sm text-slate-400">Monthly spend</p>
             <p className="mt-2 text-3xl font-semibold text-rose-300">{monthlySpend.toFixed(2)}</p>
             <p className="mt-2 text-xs text-slate-400">Filtered for {selectedMonth === 'all' ? 'all months' : formatMonthLabel(selectedMonth)}</p>
+          </article>
+          <article className="rounded-2xl border border-slate-800 bg-slate-950/80 p-4">
+            <p className="text-sm text-slate-400">Monthly income</p>
+            <p className="mt-2 text-3xl font-semibold text-emerald-300">{monthlyIncome.toFixed(2)}</p>
+            <p className="mt-2 text-xs text-slate-400">Income for the selected month and category</p>
           </article>
           <article className="rounded-2xl border border-slate-800 bg-slate-950/80 p-4">
             <p className="text-sm text-slate-400">Expense categories</p>

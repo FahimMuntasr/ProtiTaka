@@ -51,9 +51,17 @@ export default function DailyOverviewPage() {
     [todayTransactions],
   )
 
+  const earnedToday = useMemo(
+    () => todayTransactions
+      .filter((row) => (row.categories?.type ?? 'income') === 'income')
+      .reduce((sum, row) => sum + Number(row.amount), 0),
+    [todayTransactions],
+  )
+
   const dailyLimit = Number(profile?.daily_budget ?? 0)
-  const remaining = Math.max(0, dailyLimit - spentToday)
-  const progress = dailyLimit > 0 ? Math.min(100, Math.max(0, (spentToday / dailyLimit) * 100)) : 0
+  const effectiveDailyLimit = dailyLimit + earnedToday
+  const remaining = Math.max(0, effectiveDailyLimit - spentToday)
+  const progress = effectiveDailyLimit > 0 ? Math.min(100, Math.max(0, (spentToday / effectiveDailyLimit) * 100)) : 0
 
   return (
     <main className="min-h-screen bg-slate-950 p-8 text-slate-100 md:p-10">
@@ -62,12 +70,12 @@ export default function DailyOverviewPage() {
         <header className="flex flex-wrap items-center justify-between gap-4 pt-2">
           <div>
             <p className="text-sm uppercase tracking-[0.35em] text-emerald-400">Daily overview</p>
-            <h1 className="mt-3 text-4xl font-semibold text-white">Today’s spending and limit progress</h1>
+            <h1 className="mt-3 text-4xl font-semibold text-white">Today’s spending, earnings, and limit progress</h1>
             <p className="mt-3 max-w-2xl text-slate-300">This overview reads from your transactions and your profile daily budget.</p>
           </div>
         </header>
 
-        <section className="grid gap-6 md:grid-cols-2">
+        <section className="grid gap-6 md:grid-cols-3">
           <article className="rounded-3xl border border-slate-800 bg-slate-900/80 p-6 shadow-2xl shadow-black/30">
             <p className="text-sm uppercase tracking-[0.25em] text-slate-400">Spent today</p>
             <p className="mt-4 text-4xl font-semibold text-rose-300">{spentToday.toFixed(2)}</p>
@@ -75,9 +83,15 @@ export default function DailyOverviewPage() {
           </article>
 
           <article className="rounded-3xl border border-slate-800 bg-slate-900/80 p-6 shadow-2xl shadow-black/30">
+            <p className="text-sm uppercase tracking-[0.25em] text-slate-400">Earned today</p>
+            <p className="mt-4 text-4xl font-semibold text-emerald-300">{earnedToday.toFixed(2)}</p>
+            <p className="mt-3 text-slate-300">Income recorded for {today}</p>
+          </article>
+
+          <article className="rounded-3xl border border-slate-800 bg-slate-900/80 p-6 shadow-2xl shadow-black/30">
             <p className="text-sm uppercase tracking-[0.25em] text-slate-400">Daily limit progress</p>
             <p className="mt-4 text-4xl font-semibold text-emerald-300">{remaining.toFixed(2)} left</p>
-            <p className="mt-3 text-slate-300">Your profile limit is {dailyLimit.toFixed(2)}.</p>
+            <p className="mt-3 text-slate-300">Base limit {dailyLimit.toFixed(2)} + today’s income {earnedToday.toFixed(2)} = {effectiveDailyLimit.toFixed(2)} available.</p>
             <div className="mt-5 h-3 rounded-full bg-slate-800">
               <div className="h-3 rounded-full bg-emerald-400" style={{ width: `${progress}%` }} />
             </div>
